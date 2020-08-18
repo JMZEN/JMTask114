@@ -16,12 +16,6 @@ public class Util {
     public Util() {
     }
 
-/*    static {
-        factory = new Configuration()
-                .configure()
-                .buildSessionFactory();
-    }*/
-
     public Connection getConnection() throws SQLException {
         return DriverManager.getConnection(url1, userName, password);
     }
@@ -40,5 +34,9 @@ public class Util {
                     .buildSessionFactory();
         }
         return factory;
+    }
+
+    public static void closeSessionFactory() {
+        factory.close();
     }
 }
