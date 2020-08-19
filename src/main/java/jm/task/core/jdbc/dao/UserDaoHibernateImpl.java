@@ -23,7 +23,7 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void createUsersTable() {
-        String createSQLTable = "CREATE TABLE IF NOT EXISTS Users.UsersDB (id bigint not null auto_increment, age tinyint, lastName varchar(20), name varchar(15), primary key (id))";
+        String createSQLTable = "CREATE TABLE IF NOT EXISTS Users.user (id bigint not null auto_increment, age tinyint, lastName varchar(20), name varchar(15), primary key (id))";
         try (Session session = sessionFactory.openSession()) {
             session.getTransaction().begin();
             session.createSQLQuery(createSQLTable).executeUpdate();
@@ -36,7 +36,7 @@ public class UserDaoHibernateImpl implements UserDao {
     public void dropUsersTable() {
         try (Session session = sessionFactory.openSession()) {
             session.getTransaction().begin();
-            session.createSQLQuery("DROP TABLE IF EXISTS Users.UsersDB").executeUpdate();
+            session.createSQLQuery("DROP TABLE IF EXISTS Users.user").executeUpdate();
             session.getTransaction().commit();
             System.out.println("Таблица удалена с использованием Hibernate");
         }

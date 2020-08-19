@@ -6,7 +6,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "UsersDB")
+@Table
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
