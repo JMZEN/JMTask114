@@ -5,6 +5,7 @@ import jm.task.core.jdbc.util.Util;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -23,12 +24,17 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void createUsersTable() {
-        String createSQLTable = "CREATE TABLE IF NOT EXISTS Users.user (id bigint not null auto_increment, age tinyint, lastName varchar(20), name varchar(15), primary key (id))";
+        String createSQLTable = "CREATE TABLE IF NOT EXISTS Users.user1 (id bigint not null auto_increment, age tinyint, lastName varchar(20), name varchar(15), primary key (id))";
+        Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
-            session.getTransaction().begin();
+            transaction = session.beginTransaction();
             session.createSQLQuery(createSQLTable).executeUpdate();
-            session.getTransaction().commit();
+            transaction.commit();
             System.out.println("Таблица создана с использованием Hibernate");
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
         }
     }
 
@@ -36,7 +42,7 @@ public class UserDaoHibernateImpl implements UserDao {
     public void dropUsersTable() {
         try (Session session = sessionFactory.openSession()) {
             session.getTransaction().begin();
-            session.createSQLQuery("DROP TABLE IF EXISTS Users.user").executeUpdate();
+            session.createSQLQuery("DROP TABLE IF EXISTS Users.user1").executeUpdate();
             session.getTransaction().commit();
             System.out.println("Таблица удалена с использованием Hibernate");
         }
