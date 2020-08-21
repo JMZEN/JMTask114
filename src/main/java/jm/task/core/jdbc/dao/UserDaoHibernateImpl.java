@@ -71,12 +71,17 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void removeUserById(long id) {
+        Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
+            transaction = session.beginTransaction();
             User userForDelete = session.get(User.class, id);
             session.delete(userForDelete);
-            session.getTransaction().commit();
+            transaction.commit();
             System.out.printf("Пользователь с id %d был удалён с использованием Hibernate\n", id);
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
         }
     }
 
