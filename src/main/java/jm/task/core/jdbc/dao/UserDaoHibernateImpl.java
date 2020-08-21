@@ -40,22 +40,32 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void dropUsersTable() {
+        Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
-            session.getTransaction().begin();
+            transaction = session.beginTransaction();
             session.createSQLQuery("DROP TABLE IF EXISTS Users.user1").executeUpdate();
-            session.getTransaction().commit();
+            transaction.commit();
             System.out.println("Таблица удалена с использованием Hibernate");
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
         }
     }
 
     @Override
     public void saveUser(String name, String lastName, byte age) {
         User newUser = new User(name, lastName, age);
+        Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
+            transaction = session.beginTransaction();
             session.save(newUser);
-            session.getTransaction().commit();
+            transaction.commit();
             System.out.printf("Пользователь c именем %s добавлен в базу данных с использованием Hibernate\n", name);
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
         }
     }
 
