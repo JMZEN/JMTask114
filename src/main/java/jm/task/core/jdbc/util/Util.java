@@ -8,19 +8,19 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class Util {
-    private final String url1 = "jdbc:mysql://localhost:3306/Users?serverTimezone=UTC";
-    private final String userName = "root";
-    private final String password = "vhyrx4fsg";
+    private static final String url1 = "jdbc:mysql://localhost:3306/Users?serverTimezone=UTC";
+    private static final String userName = "root";
+    private static final String password = "vhyrx4fsg";
     private static SessionFactory factory;
 
     public Util() {
     }
 
-    public Connection getConnection() throws SQLException {
+    public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(url1, userName, password);
     }
 
-    public Connection getTransactedConnection() throws SQLException {
+    public static Connection getTransactedConnection() throws SQLException {
         final Connection connection1 = DriverManager.getConnection(url1, userName, password);
         connection1.setAutoCommit(false);
         connection1.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
